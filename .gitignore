@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Configs ###
+hibernate.cfg.xml
