@@ -38,7 +38,7 @@ public class User implements Serializable {
     private Token userToken;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private UserSocialData userSocialData;
+    private UserSocialData userSocialData = new UserSocialData();
 
     public UserSocialData addSocial() {
         return userSocialData;
