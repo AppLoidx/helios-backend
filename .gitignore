@@ -32,3 +32,4 @@ build/
 
 ### Configs ###
 src\main\resources\hibernate.cfg.xml
+hibernate.cfg.xml
