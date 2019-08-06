@@ -1,9 +1,12 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.apploidxxx.heliosbackend.data.entity.User;
+import com.apploidxxx.heliosbackend.data.repository.UserRepository;
+import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
+import com.apploidxxx.heliosbackend.rest.model.UserModel;
+import com.apploidxxx.heliosbackend.rest.util.Request;
+import com.apploidxxx.heliosbackend.rest.util.UserManager;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Arthur Kupriyanov
@@ -11,10 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/user")
 public class UserRestController {
+    private final UserRepository userRepository;
+
+    public UserRestController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Object getUser(@RequestParam("type") String type) {
-        return "This is response";
+    public Object getUser(@RequestParam("type") String type,
+                          @CookieValue("session") String session) {
+        User user;
+        try {
+            user = new UserManager(userRepository).getUser(session);
+        } catch (UserNotFoundException e) {
+            return e.getErrorMessage();
+        }
+        return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
