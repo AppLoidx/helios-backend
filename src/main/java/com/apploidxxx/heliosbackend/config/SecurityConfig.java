@@ -1,5 +1,6 @@
 package com.apploidxxx.heliosbackend.config;
 
+import com.apploidxxx.heliosbackend.handlers.AuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -21,48 +23,22 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 @EnableJpaRepositories
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private final AccessDeniedHandler accessDeniedHandler;
+    private final AuthorizationFilter authorizationFilter;
     private final DataSource dataSource;
 
-    public SecurityConfig(AccessDeniedHandler accessDeniedHandler, DataSource dataSource) {
-        this.accessDeniedHandler = accessDeniedHandler;
+    public SecurityConfig(AccessDeniedHandler accessDeniedHandler, DataSource dataSource, AuthorizationFilter authorizationFilter) {
         this.dataSource = dataSource;
+        this.authorizationFilter = authorizationFilter;
     }
 
-    // роль admin всегда есть доступ к /admin/**
-    // роль user всегда есть доступ к /user/**
-    // Наш кастомный "403 access denied" обработчик
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/", "/api/auth").permitAll()
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/api/auth")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        http
+                .addFilterBefore(authorizationFilter, BasicAuthenticationFilter.class)
+                .antMatcher("/**")
+                .anonymous().disable();
+        http.cors().and().csrf().disable();
     }
-
-    // создаем пользоватлелей, admin и user
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.inMemoryAuthentication()
-                .withUser("user").password("password").roles("USER")
-                .and()
-                .withUser("admin").password("password").roles("ADMIN");
-    }
-
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth)
