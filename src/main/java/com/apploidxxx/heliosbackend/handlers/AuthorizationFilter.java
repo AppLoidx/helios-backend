@@ -1,7 +1,5 @@
 package com.apploidxxx.heliosbackend.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -16,7 +14,6 @@ import java.io.IOException;
  */
 @Component
 public class AuthorizationFilter implements Filter {
-    Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
     private ServletContext context;
 
     @Override
