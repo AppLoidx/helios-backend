@@ -6,7 +6,10 @@ import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.UserModel;
 import com.apploidxxx.heliosbackend.rest.util.Request;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Arthur Kupriyanov
@@ -21,8 +24,7 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Object getUser(@RequestParam("type") String type,
-                          @CookieValue("session") String session) {
+    public Object getUser(@CookieValue("session") String session) {
         User user;
         try {
             user = new UserManager(userRepository).getUser(session);
