@@ -17,4 +17,6 @@ public class User {
     @JsonProperty("username")
     private String username;
     private Long id;
+
+
 }
