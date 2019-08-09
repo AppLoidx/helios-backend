@@ -33,3 +33,9 @@ build/
 ### Configs ###
 src\main\resources\hibernate.cfg.xml
 hibernate.cfg.xml
+
+### JavaScript Bundle###
+src\main\resources\static\js\bundle.js
+src\main\resources\static\js\bundle.js.map
+static/js/bundle.js
+static/js/bundle.js.map
