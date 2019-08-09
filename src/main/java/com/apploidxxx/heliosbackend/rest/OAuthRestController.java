@@ -25,7 +25,6 @@ import java.util.Optional;
 @RequestMapping(value = "/api/auth")
 public class OAuthRestController {
     private final UserRepository userRepository;
-
     public OAuthRestController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -48,10 +47,9 @@ public class OAuthRestController {
                     if (oldSession != null) {
                         oldSession.invalidate();
                     }
-                    HttpSession newSession = request.getSession(true);
+                    request.getSession(true);
                     response.setStatus(HttpServletResponse.SC_OK);
-                    // todo : add authorization to security
-                    response.sendRedirect("helios.html");
+                    response.sendRedirect("/helios.html");
                     return null;
                 } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -64,10 +62,13 @@ public class OAuthRestController {
                 Token token = OAuthAuthorize.getTokens(login, password);                // авторизация с helios - api oauth
                 String sessionId = SessionGenerator.generateSession(login, password);
                 userRepository.save(new User(token, sessionId));
+
+                request.getSession(true);
+
                 response.addCookie(new Cookie("session", sessionId));
                 response.setStatus(HttpServletResponse.SC_OK);
-                // todo : add authorization to security
-                response.sendRedirect("helios.html");
+                response.sendRedirect("/helios.html");
+
                 return null;
 
             } catch (UnauthorizedException e) {
