@@ -18,7 +18,6 @@ import java.util.Map;
 public class OAuthAuthorize {
     private static final RestTemplate restTemplate = new RestTemplate();
 
-    // todo : write method body correctly
     public static Token getTokens(String login, String password) throws UnauthorizedException {
         Map<String, String> vars = new HashMap<>();
         vars.put("login", login);

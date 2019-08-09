@@ -5,6 +5,8 @@ import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -23,6 +25,15 @@ public class UserManager {
         if (optUser.isPresent()) {
             return optUser.get();
         } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    public User getUser(String session, String redirectUri, HttpServletResponse response) throws IOException, UserNotFoundException {
+        try {
+            return getUser(session);
+        } catch (UserNotFoundException e) {
+            response.sendRedirect(redirectUri);
             throw new UserNotFoundException();
         }
     }
