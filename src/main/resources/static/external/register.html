@@ -42,19 +42,20 @@
                 <div class="col-sm-4 label-column"><label class="col-form-label"
                                                           for="password-input-field">Password </label></div>
                 <div class="col-sm-6 input-column"><input name="password" class="form-control" type="password"
-                                                          id="password-input-field"></div>
+                                                          id="password-input-field" onchange="onPasswordChange()"></div>
             </div>
             <div class="form-row form-group">
                 <div class="col-sm-4 label-column"><label class="col-form-label" for="repeat-password-input-field">Repeat
                     Password </label></div>
                 <div class="col-sm-6 input-column"><input class="form-control" type="password"
-                                                          id="repeat-password-input-field"></div>
+                                                          id="repeat-password-input-field"
+                                                          oninput="checkPasswordEqual()"></div>
             </div>
 
             <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label
                     class="form-check-label" for="formCheck-1">I've read and accept the terms and conditions</label>
             </div>
-            <button class="btn btn-light submit-button" type="submit">Submit</button>
+            <button class="btn btn-light submit-button" type="submit" id="submit-btn">Submit</button>
         </form>
     </div>
 </div>
@@ -63,18 +64,57 @@
 <script>
     const onUsernameChange = function () {
         let inputField = $("#name-input-field");
-        fetch("http://localhost:3000/api/check?check=user_exist&username=" + inputField.val())
+
+        fetch("https://helios-service.herokuapp.com/api/check?check=user_exist&username=" + inputField.val())
             .then(resp => resp.json()).then(data => {
             if (data["exist"] === true) {
                 inputField.removeClass("is-valid");
                 inputField.addClass("is-invalid");
             } else {
-                inputField.removeClass("is-invalid");
-                inputField.addClass("is-valid");
+                if (/[^\s]+/.test(inputField.val())) {
+                    console.log(inputField.val());
+                    inputField.removeClass("is-invalid");
+                    inputField.addClass("is-valid");
+                } else {
+                    inputField.removeClass("is-valid");
+                    inputField.addClass("is-invalid");
+                }
             }
         });
+    };
 
+    const onPasswordChange = function () {
+        let inputField = $("#password-input-field");
+
+        if (/[^\s]+/.test(inputField.val()) && inputField.val().length > 8) {
+            inputField.addClass("is-valid");
+            inputField.removeClass("is-invalid");
+            return true;
+        } else {
+            inputField.addClass("is-invalid");
+            inputField.removeClass("is-valid");
+            return false;
+        }
+    };
+
+    const checkPasswordEqual = function () {
+        let firstPasswordInp = $("#password-input-field");
+        let repeatPasswordInp = $("#repeat-password-input-field");
+
+        console.log(repeatPasswordInp.val());
+        if (firstPasswordInp.val() === repeatPasswordInp.val()) {
+            repeatPasswordInp.removeClass("is-invalid");
+            repeatPasswordInp.addClass("is-valid");
+
+            return true;
+        } else {
+            repeatPasswordInp.removeClass("is-valid");
+            repeatPasswordInp.addClass("is-invalid");
+            $("#submit-btn").addClass("display-none");
+            return false;
+        }
     }
+
 </script>
 </body>
 
