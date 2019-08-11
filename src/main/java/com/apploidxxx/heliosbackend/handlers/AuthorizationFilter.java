@@ -32,7 +32,11 @@ public class AuthorizationFilter implements Filter {
         if (req.getRequestURI().matches("/external/.+")
                 || req.getRequestURI().equals("/api/auth")
                 || req.getRequestURI().equals("/api/register")
-                || req.getRequestURI().equals("/error")) {
+                || req.getRequestURI().equals("/error")
+                || req.getRequestURI().equals("/")
+                || req.getRequestURI().equals("/index.html")
+                || req.getRequestURI().matches("/assets/.*")
+        ) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -44,7 +48,9 @@ public class AuthorizationFilter implements Filter {
         } else {
             for (Cookie c : req.getCookies()) {
                 if (c.getName().equals("session")) {
-                    if (c.getValue() != null) break;
+                    if (c.getValue() != null) {
+                        break;
+                    }
                     else {
                         res.sendRedirect(redirectUri);
                         return;
