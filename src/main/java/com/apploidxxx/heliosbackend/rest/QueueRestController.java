@@ -1,6 +1,5 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.data.entity.User;
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
@@ -28,16 +27,20 @@ public class QueueRestController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     Object
-    get(HttpServletResponse response, @CookieValue("session") String session) throws IOException {
-        User user;
+    get(HttpServletResponse response, @CookieValue("session") String session, @RequestParam("queue_name") String queueName) throws IOException {
         try {
-            user = new UserManager(userRepository).getUser(session);
+            new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
             return e.wrapResponse(response);
         }
-
-        ResponseEntity<Queue> queueResponseEntity = new Request().get("queue", Queue.class, "access_token", user.getUserToken().getAccessToken());
-
+        ResponseEntity<Queue> queueResponseEntity;
+        try {
+            queueResponseEntity = new Request().get("queue", Queue.class,
+                    "queue_name", queueName);
+        } catch (HttpStatusCodeException e) {
+            response.setStatus(e.getStatusCode().value());
+            return e.getResponseBodyAsString();
+        }
         response.setStatus(queueResponseEntity.getStatusCode().value());
 
         return queueResponseEntity.getBody();
@@ -70,11 +73,11 @@ public class QueueRestController {
     post(HttpServletResponse response, @CookieValue("session") String session,
          @RequestParam("queue_name") String queueName,
          @RequestParam("fullname") String fullname,
-         @RequestParam("generation") String genaration,
-         @RequestParam("password") String password) {
+         @RequestParam(value = "generation", defaultValue = "") String genaration,
+         @RequestParam(value = "password", defaultValue = "") String password) {
 
         try {
-            Request.put("queue", null,
+            new Request().post("queue", null,
                     "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
                     "queue_name", queueName,
                     "password", password,
