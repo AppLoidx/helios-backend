@@ -8,6 +8,7 @@ import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
 import com.apploidxxx.heliosbackend.rest.network.api.helios.OAuthAuthorize;
 import com.apploidxxx.heliosbackend.rest.network.api.helios.exception.UnauthorizedException;
 import com.apploidxxx.heliosbackend.rest.util.SessionGenerator;
+import org.hibernate.TransientObjectException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -25,6 +26,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/auth")
 public class OAuthRestController {
     private final UserRepository userRepository;
+
     public OAuthRestController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -60,12 +62,29 @@ public class OAuthRestController {
         } else {
             try {
                 Token token = OAuthAuthorize.getTokens(login, password);                // авторизация с helios - api oauth
-                String sessionId = SessionGenerator.generateSession(login, password);
-                userRepository.save(new User(token, sessionId));
-
+                Optional<User> userOpt;
+                try {
+                    userOpt = userRepository.findByUsername(login);
+                    String sessionId = SessionGenerator.generateSession(login, password);
+                    if (userOpt.isPresent()) {
+                        userOpt.get().setSession(sessionId);
+                        userOpt.get().getUserToken().setAccessToken(token.getAccessToken());
+                        userOpt.get().getUserToken().setRefreshToken(token.getRefreshToken());
+                        response.addCookie(new Cookie("session", userOpt.get().getSession()));
+                        userRepository.save(userOpt.get());
+                    } else {
+                        userRepository.save(new User(token, sessionId, login));
+                        response.addCookie(new Cookie("session", sessionId));
+                    }
+                } catch (TransientObjectException e) {
+                    System.err.println(e.getMessage());
+                    String sessionId = SessionGenerator.generateSession(login, password);
+                    userRepository.save(new User(token, sessionId, login));
+                    response.addCookie(new Cookie("session", sessionId));
+                }
                 request.getSession(true);
 
-                response.addCookie(new Cookie("session", sessionId));
+
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.sendRedirect("/helios.html");
 
