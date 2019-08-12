@@ -3,10 +3,7 @@ package com.apploidxxx.heliosbackend.data.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -21,14 +18,10 @@ public class UserSocialData implements Serializable {
     @GeneratedValue
     private Long id;
 
+    @OneToOne
+    private User user;
+
     public UserSocialData() {
-    }
-
-    public UserSocialData(Long vkId, String telegramId, Long userId) {
-
-        this.vkId = vkId;
-        this.telegramId = telegramId;
-        this.userHeliosId = userId;
     }
 
     @Column
@@ -40,8 +33,16 @@ public class UserSocialData implements Serializable {
     @Column
     private Long userHeliosId;
 
+    @Column
+    private String vkAccessToken;
+
     public UserSocialData addVkId(Long vkId) {
         this.vkId = vkId;
+        return this;
+    }
+
+    public UserSocialData addVkAccessToken(String acccessToken) {
+        this.vkAccessToken = acccessToken;
         return this;
     }
 

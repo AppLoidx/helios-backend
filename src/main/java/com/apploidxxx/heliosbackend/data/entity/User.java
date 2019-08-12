@@ -1,6 +1,5 @@
 package com.apploidxxx.heliosbackend.data.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,6 @@ import java.io.Serializable;
 @Getter
 @Entity
 @Table(name = "users")
-@Data
 public class User implements Serializable {
     public User() {
     }
@@ -23,7 +21,8 @@ public class User implements Serializable {
         this.userToken = token;
     }
 
-    public User(Token token, String session) {
+    public User(Token token, String session, String username) {
+        this.username = username;
         this.userToken = token;
         this.session = session;
     }
@@ -33,15 +32,20 @@ public class User implements Serializable {
     private Long id;
 
     private String session;
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Token userToken;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserSocialData userSocialData = new UserSocialData();
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserSocialData userSocialData;
 
     public UserSocialData addSocial() {
-        return userSocialData;
+        if (this.userSocialData == null) {
+            this.userSocialData = new UserSocialData();
+        }
+        return this.userSocialData;
     }
 
     @Override
@@ -51,5 +55,14 @@ public class User implements Serializable {
                 ", userToken=" + userToken +
                 ", userSocialData=" + userSocialData +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User) {
+            return ((User) obj).id.equals(this.id);
+        }
+
+        return false;
     }
 }
