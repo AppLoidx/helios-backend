@@ -122,8 +122,8 @@
                 <configuration>
                     <appName>itmo-helios</appName>
                     <processTypes>
-                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/*
-                            com.apploidxxx.heliosbackend.HeliosBackendApplication
+                        <web>
+                            java $JAVA_OPTS -cp target/classes:target/dependency/* com.apploidxxx.heliosbackend.HeliosBackendApplication
                         </web>
                     </processTypes>
                 </configuration>
