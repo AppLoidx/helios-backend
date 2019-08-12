@@ -60,6 +60,7 @@ public class Request {
     }
 
     private static String generatePathWithParams(String path, Map<String, String> map) {
+        if (map.isEmpty()) return path;
         StringBuilder sb = new StringBuilder();
 
         for (String k : map.keySet()) {
