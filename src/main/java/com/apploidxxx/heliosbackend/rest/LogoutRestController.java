@@ -1,6 +1,5 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.data.entity.User;
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
@@ -28,8 +27,7 @@ public class LogoutRestController {
                   HttpServletResponse response) {
 
         try {
-            User user = new UserManager(userRepository).getUser(session);
-            userRepository.delete(user);
+            new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
             return e.wrapResponse(response);
         }
