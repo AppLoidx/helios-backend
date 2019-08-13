@@ -29,9 +29,24 @@ public class OAuthVK {
         } catch (IOException e) {
             logger.error("Couldn't find local configs properties file");
         }
-        if (clientId == null) clientId = properties.getProperty("VK_CLIENT_ID");
-        if (clientSecret == null) clientSecret = properties.getProperty("VK_CLIENT_SECRET");
-        if (redirectUri == null) redirectUri = properties.getProperty("VK_REDIRECT_URI");
+
+        if (clientId == null) {
+            clientId = properties.getProperty("VK_CLIENT_ID");
+            logger.debug("Client Id set upped from conf file");
+        }
+        else logger.debug("Client Id set upped from env");
+
+        if (clientSecret == null){
+            clientSecret = properties.getProperty("VK_CLIENT_SECRET");
+            logger.debug("Client Secret set upped from conf file");
+        }
+        else logger.debug("Client Secret set upped from env");
+
+        if (redirectUri == null){
+            redirectUri = properties.getProperty("VK_REDIRECT_URI");
+            logger.debug("Redirect URI set upped from conf file");
+        }
+        else logger.debug("Redirect URI set upped from env");
     }
 
 
