@@ -36,6 +36,7 @@ public class AuthorizationFilter implements Filter {
                 || req.getRequestURI().equals("/")
                 || req.getRequestURI().equals("/index.html")
                 || req.getRequestURI().matches("/assets/.*")
+                || req.getRequestURI().matches("/policy.*")
         ) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
