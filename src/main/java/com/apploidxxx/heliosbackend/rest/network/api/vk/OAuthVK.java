@@ -1,7 +1,12 @@
 package com.apploidxxx.heliosbackend.rest.network.api.vk;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * @author Arthur Kupriyanov
@@ -12,11 +17,24 @@ public class OAuthVK {
 
     private static String VK_AUTHORIZE_URI = "https://oauth.vk.com/authorize";
     private static String VK_ACCESS_URI = "https://oauth.vk.com/access_token";
-    private static String clientId = "7051053"; // System.getProperties().getProperty("VK_CLIENT_ID");
-    private static String clientSecret = "mrdMYL4yRv3rLQRvPczX"; //System.getProperties().getProperty("VK_CLIENT_SECRET");
-    private static String redirectUri = "http://localhost:8080/api/vk/receiver";
-    //    private static String redirectUri = "https://itmo-helios.herokuapp.com/api/vk/receiver";
-    private static String groupIds = "185406943";
+    private static String clientId = System.getenv("VK_CLIENT_ID");
+    private static String clientSecret = System.getenv("VK_CLIENT_SECRET");
+    private static String redirectUri = System.getenv("VK_REDIRECT_URI");
+
+    static {
+        Logger logger = LoggerFactory.getLogger(OAuthVK.class);
+        Properties properties = new Properties();
+        try {
+            properties.load(OAuthVK.class.getClassLoader().getResourceAsStream("local_configs.properties"));
+        } catch (IOException e) {
+            logger.error("Couldn't find local configs properties file");
+        }
+        if (clientId == null) clientId = properties.getProperty("VK_CLIENT_ID");
+        if (clientSecret == null) clientSecret = properties.getProperty("VK_CLIENT_SECRET");
+        if (redirectUri == null) redirectUri = properties.getProperty("VK_REDIRECT_URI");
+    }
+
+
     /*
         page — форма авторизации в отдельном окне;
         popup — всплывающее окно;
@@ -51,5 +69,4 @@ public class OAuthVK {
                         "&code=%s",
                 VK_ACCESS_URI, clientId, clientSecret, redirectUri, code);
     }
-
 }
