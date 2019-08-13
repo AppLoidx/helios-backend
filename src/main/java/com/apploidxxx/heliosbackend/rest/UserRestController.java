@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author Arthur Kupriyanov
  */
@@ -24,11 +26,13 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Object getUser(@CookieValue("session") String session) {
+    public Object getUser(@CookieValue("session") String session, HttpServletResponse response) {
         User user;
         try {
             user = new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            System.out.println("UNAUTHORIZED");
             return e.getErrorMessage();
         }
         return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());
