@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NOT FOUND</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            min-height: 100vh;
+        }
+        .centered-v{
+            min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .pnf-text{
+            transition: all 1s;
+        }
+        .pnf-text:hover{
+            transform: translateY(20px);
+        }
+        .menhera {
+            transform: scale(0.5);
+            transition: transform 0.5s 0s linear;
+        }
+        .menhera:hover {
+            transform: translateY(10px) scale(0.5);
+        }
+    </style>
+</head>
+<body>
+<div class="centered-v justify-content-center">
+    <div>
+        <h2 class="not-found-text red-shadow shake d-inline-flex">
+            <span>4</span>
+            <span>0</span>
+            <span>4</span>
+        </h2>
+        <div class="ml-2 flex-row d-inline-flex">
+            <span class="pnf-text mx-1 font-weight-bold">Page</span>
+            <span class="pnf-text mx-1 font-weight-bold">Not</span>
+            <span class="pnf-text mx-1 font-weight-bold">Found</span>
+        </div>
+    </div>
+    <img class="menhera d-none d-sm-block" src="assets/img/boring.jpg" alt="">
+
+</div>
+</body>
+</html>
