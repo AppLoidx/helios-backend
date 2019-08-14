@@ -32,7 +32,6 @@ public class UserRestController {
             user = new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            System.out.println("UNAUTHORIZED");
             return e.getErrorMessage();
         }
         return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());

@@ -55,6 +55,7 @@ public class OAuthVK {
         popup — всплывающее окно;
      */
     private static String display = "page";
+
     /*
         notify - 1
         Добавление ссылки на приложение в меню слева - 256
