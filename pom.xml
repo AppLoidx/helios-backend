@@ -10,12 +10,13 @@
     </parent>
     <groupId>com.apploidxxx</groupId>
     <artifactId>helios-backend</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>helios-backend</name>
     <description>Backend for helios service</description>
 
     <properties>
         <java.version>1.8</java.version>
+
     </properties>
 
 

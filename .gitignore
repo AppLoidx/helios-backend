@@ -33,7 +33,7 @@ build/
 ### Configs ###
 src/main/resources/hibernate.cfg.xml
 hibernate.cfg.xml
-src/main/java/com/apploidxxx/heliosbackend/WebConfig.java
+local_configs.properties
 
 ### JavaScript Bundle###
 src/main/resources/static/js/bundle.js
