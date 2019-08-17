@@ -7,6 +7,19 @@
     <title>Register</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/register.min.css">
+
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="theme-color" content="#ffffff">
+    <style>
+        body{
+            overflow-x: hidden;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,41 +31,43 @@
                 <div class="col-sm-4 label-column"><label class="col-form-label"
                                                           for="name-input-field">Username </label></div>
                 <div class="col-sm-6 input-column"><input name="username" class="form-control" type="text"
-                                                          id="name-input-field" onchange="onUsernameChange()"></div>
+                                                          id="name-input-field" onchange="onUsernameChange()" required></div>
             </div>
             <div class="form-row form-group">
                 <div class="col-sm-4 label-column"><label class="col-form-label" for="first-name-input-field">First
                     Name </label></div>
                 <div class="col-sm-6 input-column"><input name="first_name" class="form-control" type="text"
-                                                          id="first-name-input-field"></div>
+                                                          id="first-name-input-field" required></div>
             </div>
             <div class="form-row form-group">
                 <div class="col-sm-4 label-column"><label class="col-form-label" for="last-name-input-field">Last
                     Name </label></div>
                 <div class="col-sm-6 input-column"><input name="last_name" class="form-control" type="text"
-                                                          id="last-name-input-field"></div>
+                                                          id="last-name-input-field" required></div>
             </div>
             <div class="form-row form-group">
                 <div class="col-sm-4 label-column"><label class="col-form-label" for="email-input-field">Email </label>
                 </div>
                 <div class="col-sm-6 input-column"><input name="email" class="form-control" type="email"
-                                                          id="email-input-field"></div>
+                                                          id="email-input-field" required></div>
             </div>
             <div class="form-row form-group">
-                <div class="col-sm-4 label-column"><label class="col-form-label"
+                <div class="col-sm-4 label-column mt-3"><label class="col-form-label"
                                                           for="password-input-field">Password </label></div>
-                <div class="col-sm-6 input-column"><input name="password" class="form-control" type="password"
-                                                          id="password-input-field" onchange="onPasswordChange()"></div>
+                <div class="col-sm-6 input-column">
+                    <label for="password-input-field" class="text-muted" style="font-size: smaller"><span>Пароль должен быть больше 8 знаков</span></label>
+                    <input name="password" class="form-control" type="password"
+                                                          id="password-input-field" oninput="onPasswordChange()" required minlength="9" maxlength="30"></div>
             </div>
             <div class="form-row form-group">
                 <div class="col-sm-4 label-column"><label class="col-form-label" for="repeat-password-input-field">Repeat
                     Password </label></div>
                 <div class="col-sm-6 input-column"><input class="form-control" type="password"
                                                           id="repeat-password-input-field"
-                                                          oninput="checkPasswordEqual()"></div>
+                                                          oninput="checkPasswordEqual()" required minlength="9" maxlength="30"></div>
             </div>
 
-            <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1" required><label
                     class="form-check-label" for="formCheck-1">Я прочел и принимаю <a href="/policy/index.html">Политику обработки персональных данных</a></label>
             </div>
             <button class="btn btn-light submit-button" type="submit" id="submit-btn">Submit</button>
@@ -92,8 +107,10 @@
         } else {
             inputField.addClass("is-invalid");
             inputField.removeClass("is-valid");
+            checkPasswordEqual();
             return false;
         }
+
     };
 
     const checkPasswordEqual = function () {

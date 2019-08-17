@@ -122,6 +122,8 @@ label {
 }
 
 input {
+    margin-top: 4px;
+    text-align: center;
     background: transparent;
     border: 0;
     color: #f2f2f2;
@@ -131,6 +133,17 @@ input {
     outline: none !important;
     width: 100%;
 }
+input[type=text]{
+    margin-top: 5px;
+}
+input[type=password]{
+    margin-top: 0;
+    margin-bottom: 6px;
+}
+
+#password-label {
+    margin-top: 16px;
+}
 
 input::-moz-focus-inner {
     border: 0;
@@ -138,7 +151,7 @@ input::-moz-focus-inner {
 
 #submit {
     color: #707075;
-    margin-top: 40px;
+    margin-top: 33px;
     transition: color 300ms;
 }
 
@@ -148,4 +161,9 @@ input::-moz-focus-inner {
 
 #submit:active {
     color: #d0d0d2;
+}
+.type-input {
+    /*border-radius: 15px;*/
+    /*border: 2px solid rgba(179, 183, 187, 0.23);*/
+    border-bottom: 1px solid rgba(179, 183, 187, 0.23);
 }

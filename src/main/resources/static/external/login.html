@@ -5,6 +5,14 @@
     <title>Login via Helios API</title>
     <script src="assets/js/anime.min.js"></script>
     <link rel="stylesheet" href="assets/css/index.css">
+
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
 <div class="page">
@@ -35,14 +43,22 @@
                                 id="stop878"></stop>
                     </linearGradient>
                 </defs>
-                <path d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143"></path>
+                <path d="m 40,120.00016 240.99984,-3.1e-4
+                c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35
+                h -239.99984
+                c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5
+                h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25
+                h -190
+                c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25
+                h 168.57143"></path>
             </svg>
             <form class="form" action="/api/auth" method="get">
                 <label for="username">Username</label>
-                <input name="login" type="text" id="username">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
-                <input type="submit" id="submit" value="Submit">
+                <input  class="type-input" name="login" autocomplete="username" type="text" id="username">
+                <label for="password" id="password-label">Password</label>
+                <input class="type-input" type="password" autocomplete="current-password" id="password" name="password">
+                <input type="submit"
+                       id="submit" value="Submit">
             </form>
         </div>
     </div>
