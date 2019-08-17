@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +35,12 @@ public class UserRestController {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return e.getErrorMessage();
         }
-        return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());
+        try {
+            return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());
+        } catch (HttpStatusCodeException e){
+            response.setStatus(e.getStatusCode().value());
+            return null;
+        }
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
