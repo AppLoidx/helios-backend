@@ -1,5 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
+import com.apploidxxx.heliosbackend.config.ExternalSourcesConfig;
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
@@ -8,6 +9,7 @@ import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -83,6 +85,32 @@ public class QueueRestController {
                     "password", password,
                     "fullname", fullname,
                     "generation", genaration);
+        } catch (UserNotFoundException e) {
+            return e.wrapResponse(response);
+        } catch (HttpStatusCodeException e) {
+            response.setStatus(e.getStatusCode().value());
+            return e.getResponseBodyAsString();
+        }
+        return null;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
+    public @ResponseBody
+    Object
+    delete (HttpServletResponse response, @CookieValue("session") String session,
+            @RequestParam("queue_name") String queueName,
+            @RequestParam("target") String target,
+            @RequestParam(value = "username", defaultValue = "") String username){
+        try {
+//            Request.delete("queue", null,
+//                    "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+//                    "queue_name", queueName,
+//                    "target", target,
+//                    "username", username);
+            new RestTemplate().delete(ExternalSourcesConfig.heliosApiUri
+            + "queue?" + String.format("access_token=%s&queue_name=%s&target=%s&username=%s",
+                    new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+                    queueName, target, username));
         } catch (UserNotFoundException e) {
             return e.wrapResponse(response);
         } catch (HttpStatusCodeException e) {
