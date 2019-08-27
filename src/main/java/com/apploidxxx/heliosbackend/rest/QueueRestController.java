@@ -44,7 +44,6 @@ public class QueueRestController {
             return e.getResponseBodyAsString();
         }
         response.setStatus(queueResponseEntity.getStatusCode().value());
-
         return queueResponseEntity.getBody();
     }
 
@@ -102,11 +101,7 @@ public class QueueRestController {
             @RequestParam("target") String target,
             @RequestParam(value = "username", defaultValue = "") String username){
         try {
-//            Request.delete("queue", null,
-//                    "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
-//                    "queue_name", queueName,
-//                    "target", target,
-//                    "username", username);
+
             new RestTemplate().delete(ExternalSourcesConfig.heliosApiUri
             + "queue?" + String.format("access_token=%s&queue_name=%s&target=%s&username=%s",
                     new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
