@@ -5,26 +5,57 @@
     <title>Login via Helios API</title>
     <script src="assets/js/anime.min.js"></script>
     <link rel="stylesheet" href="assets/css/index.css">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="theme-color" content="#ffffff">
+
+<!--    Google Sign-in-->
+    <meta name="google-signin-client_id" content="835400034288-9ml5qeqd6ciis356v1s995345f5cbirn.apps.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+
+<!--    Vkontakte SignIn-->
+    <script src="https://vk.com/js/api/openapi.js?162" type="text/javascript"></script>
 </head>
 <body>
+<!--Vk Script-->
+<script type="text/javascript">
+    VK.init({
+        apiId: 7051053
+    });
+</script>
 <div class="page">
     <div class="container">
         <div class="left">
-            <div class="login">Login</div>
-            <div class="eula">Войдите через Helios API, чтобы дать доступ другому приложению к вашим общим данным
+            <div class="eula">
+                <div id="my-signin2"></div>
+                <div style="height:50px;width:240px;margin-top: 5px">
+                    <div class="abcRioButton abcRioButtonBlue">
+                        <div class="abcRioButtonContentWrapper">
+                            <div class="abcRioButtonIcon" style="padding: 15px">
+                                <div style="width:18px;height:18px;color: #597da3;font-size: 20px" class="abcRioButtonSvgImageWithFallback abcRioButtonIconImage abcRioButtonIconImage18">
+                                    <i class="fa fa-vk abcRioButtonSvg" ></i>
+                                </div>
+
+                            </div>
+
+                            <span style="font-size:16px;line-height:48px;" class="abcRioButtonContents">
+                                Sign in with Vkontakte
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
                 <br>Если у Вас нет аккаунта <a href="register.html">зарегистрируйтесь</a>
             </div>
         </div>
         <div class="right">
-            <svg viewBox="0 0 320 300">
+            <svg viewBox="0 0 320 300" class="svg-form">
                 <defs>
                     <linearGradient
                             id="linearGradient"
@@ -43,7 +74,7 @@
                                 id="stop878"></stop>
                     </linearGradient>
                 </defs>
-                <path d="m 40,120.00016 240.99984,-3.1e-4
+                <path class="path-form" d="m 40,120.00016 240.99984,-3.1e-4
                 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35
                 h -239.99984
                 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5
@@ -59,10 +90,42 @@
                 <input class="type-input" type="password" autocomplete="current-password" id="password" name="password">
                 <input type="submit"
                        id="submit" value="Submit">
+
+
             </form>
+
+
         </div>
     </div>
 </div>
+
+<!--Google Script-->
+
+<script>
+    function onSuccess(googleUser) {
+        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+    }
+    function onFailure(error) {
+        console.log(error);
+    }
+    function renderButton() {
+        gapi.signin2.render('my-signin2', {
+            'scope': 'profile email',
+            'width': 240,
+            'height': 50,
+            'longtitle': true,
+            'theme': 'dark',
+            'onsuccess': onSuccess,
+            'onfailure': onFailure
+        });
+    }
+
+</script>
+
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+
+
 <script>
     var current = null;
     document.querySelector('#username').addEventListener('focus', function (e) {
