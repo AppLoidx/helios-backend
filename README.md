@@ -1,5 +1,5 @@
 # Backend for Helios
-<h1 align=center><img src="https://heroku-badge.herokuapp.com/?app=itmo-helios"/></h1>
+<h1 align=center><img src="https://heroku-badge.herokuapp.com/?app=itmo-helios&style=flat&svg=1"/></h1>
 Backend for helios using Spring Boot
 
 ![](Helios.png)
