@@ -70,6 +70,7 @@ public class OAuthRestController {
                         userOpt.get().setSession(sessionId);
                         userOpt.get().getUserToken().setAccessToken(token.getAccessToken());
                         userOpt.get().getUserToken().setRefreshToken(token.getRefreshToken());
+                        userOpt.get().setEmailFromAPI();
                         response.addCookie(new Cookie("session", userOpt.get().getSession()));
                         userRepository.save(userOpt.get());
                     } else {
