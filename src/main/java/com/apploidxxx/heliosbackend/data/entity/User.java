@@ -1,7 +1,10 @@
 package com.apploidxxx.heliosbackend.data.entity;
 
+import com.apploidxxx.heliosbackend.rest.model.UserModel;
+import com.apploidxxx.heliosbackend.rest.util.Request;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -25,6 +28,21 @@ public class User implements Serializable {
         this.username = username;
         this.userToken = token;
         this.session = session;
+
+        setEmailFromAPI();
+
+    }
+
+    public void setEmailFromAPI(){
+        try {
+            UserModel user = new Request().get("user", UserModel.class,
+                    "access_token", this.userToken.getAccessToken()).getBody();
+            if (user != null) {
+                this.addSocial().addEmail(user.getUser().getContactDetails().getEmail());
+            }
+        } catch (Exception e){
+            LoggerFactory.getLogger(User.class).error("Error while getting user email : ", e);
+        }
     }
 
     @Id
@@ -43,7 +61,7 @@ public class User implements Serializable {
 
     public UserSocialData addSocial() {
         if (this.userSocialData == null) {
-            this.userSocialData = new UserSocialData();
+            this.userSocialData = new UserSocialData(this);
         }
         return this.userSocialData;
     }
