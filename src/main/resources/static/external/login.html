@@ -6,11 +6,11 @@
     <script src="assets/js/anime.min.js"></script>
     <link rel="stylesheet" href="assets/css/index.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="144x144" href="../meta/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../meta/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../meta/favicon-16x16.png">
+    <link rel="manifest" href="../meta/site.webmanifest">
+    <link rel="mask-icon" href="../meta/safari-pinned-tab.svg" color="#5bbad5">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#603cba">
     <meta name="theme-color" content="#ffffff">
@@ -19,22 +19,15 @@
     <meta name="google-signin-client_id" content="835400034288-9ml5qeqd6ciis356v1s995345f5cbirn.apps.googleusercontent.com">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 
-<!--    Vkontakte SignIn-->
-    <script src="https://vk.com/js/api/openapi.js?162" type="text/javascript"></script>
 </head>
 <body>
-<!--Vk Script-->
-<script type="text/javascript">
-    VK.init({
-        apiId: 7051053
-    });
-</script>
+
 <div class="page">
     <div class="container">
         <div class="left">
             <div class="eula">
                 <div id="my-signin2"></div>
-                <div style="height:50px;width:240px;margin-top: 5px">
+                <div style="height:50px;width:240px;margin-top: 5px" onclick="">
                     <div class="abcRioButton abcRioButtonBlue">
                         <div class="abcRioButtonContentWrapper">
                             <div class="abcRioButtonIcon" style="padding: 15px">
@@ -83,13 +76,14 @@
                 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25
                 h 168.57143"></path>
             </svg>
-            <form class="form" action="/api/auth" method="get">
+            <form class="form">
+                <div style="color: red; position: fixed; top: 65px" id="invalid-auth" hidden>Неверный логин или пароль</div>
                 <label for="username">Username</label>
                 <input  class="type-input" name="login" autocomplete="username" type="text" id="username">
                 <label for="password" id="password-label">Password</label>
                 <input class="type-input" type="password" autocomplete="current-password" id="password" name="password">
-                <input type="submit"
-                       id="submit" value="Submit">
+                <input type="button"
+                       id="submit" value="Submit" onclick="onSubmitClick()">
 
 
             </form>
@@ -98,12 +92,42 @@
         </div>
     </div>
 </div>
+<script>
+    function onSubmitClick(){
+                let username = document.querySelector("#username").value;
+                let password = document.querySelector("#password").value;
 
+                fetch(`/api/auth?login=${username}&password=${password}`)
+                    .then(response => {
+                        if (response.status === 200){
+                            document.location.href = "/helios.html"
+                        } else if (response.status === 401) {
+                            document.querySelector("#invalid-auth").innerHTML = "Неверный логин или пароль";
+                            document.querySelector("#invalid-auth").removeAttribute("hidden");
+                        } else {
+                            document.querySelector("#invalid-auth").innerHTML = "Ошибка. <br> Повторите попытку позже";
+                            document.querySelector("#invalid-auth").removeAttribute("hidden");
+                        }
+                    })
+    }
+</script>
 <!--Google Script-->
 
 <script>
     function onSuccess(googleUser) {
-        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+        console.log('Logged in as: ' + googleUser.getBasicProfile().getEmail());
+        fetch("/api/google/oauth?email=" + window.btoa(googleUser.getBasicProfile().getEmail()), {
+            "method" : 'put'
+        })
+            .then(response => {
+                if (response.status === 200){
+                    document.location.href = "/helios.html";
+                } else if (response.status === 404){
+                    document.location.href = "/external/register.html#" + googleUser.getBasicProfile().getEmail();
+                } else {
+                    console.log(response.status);
+                }
+            });
     }
     function onFailure(error) {
         console.log(error);
@@ -118,6 +142,10 @@
             'onsuccess': onSuccess,
             'onfailure': onFailure
         });
+    }
+
+    function vkAuth(){
+        document.location.href = ""
     }
 
 </script>
