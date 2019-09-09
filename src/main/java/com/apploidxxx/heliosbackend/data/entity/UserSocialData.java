@@ -24,6 +24,10 @@ public class UserSocialData implements Serializable {
     public UserSocialData() {
     }
 
+    public UserSocialData(User user){
+        this.user = user;
+    }
+
     @Column
     private Long vkId;
 
@@ -31,18 +35,15 @@ public class UserSocialData implements Serializable {
     private String telegramId;
 
     @Column
-    private Long userHeliosId;
+    private String email;
 
-    @Column
-    private String vkAccessToken;
-
-    public UserSocialData addVkId(Long vkId) {
-        this.vkId = vkId;
+    public UserSocialData addEmail(String email){
+        this.email = email;
         return this;
     }
 
-    public UserSocialData addVkAccessToken(String acccessToken) {
-        this.vkAccessToken = acccessToken;
+    public UserSocialData addVkId(Long vkId) {
+        this.vkId = vkId;
         return this;
     }
 
@@ -51,8 +52,5 @@ public class UserSocialData implements Serializable {
         return this;
     }
 
-    public UserSocialData addUserHeiosId(Long userHeiosId) {
-        this.userHeliosId = userHeiosId;
-        return this;
-    }
+
 }
