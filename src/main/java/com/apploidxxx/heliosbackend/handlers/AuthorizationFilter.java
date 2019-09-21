@@ -34,6 +34,7 @@ public class AuthorizationFilter implements Filter {
                 || req.getRequestURI().equals("/api/register")
                 || req.getRequestURI().equals("/error")
                 || req.getRequestURI().equals("/")
+                || req.getRequestURI().equals("")
                 || req.getRequestURI().matches("/meta/.*")
                 || req.getRequestURI().equals("/index.html")
                 || req.getRequestURI().equals("/favicon.ico")
