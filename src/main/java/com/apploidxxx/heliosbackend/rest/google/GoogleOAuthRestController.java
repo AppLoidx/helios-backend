@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,10 @@ public class GoogleOAuthRestController {
 
             response.addCookie(cookie);
             this.userRepository.save(user);
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
             request.getSession(true);
             response.setStatus(200);
 
