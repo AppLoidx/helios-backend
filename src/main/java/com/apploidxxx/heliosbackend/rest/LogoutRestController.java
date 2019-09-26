@@ -23,9 +23,9 @@ public class LogoutRestController {
 
     @GetMapping
     public @ResponseBody
-    Object logout(@CookieValue("session") String session,
-                  HttpServletResponse response) {
-
+    Object logout(@CookieValue(value = "session", defaultValue = "") String session,
+                  HttpServletResponse response) throws IOException {
+        if (session.equals("")) response.sendRedirect("/api/auth");
         try {
             new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
@@ -36,11 +36,7 @@ public class LogoutRestController {
         c.setMaxAge(0);
         response.addCookie(c);
 
-        try {
-            response.sendRedirect("/external/login.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response.sendRedirect("/api/auth");
         return null;
     }
 }
