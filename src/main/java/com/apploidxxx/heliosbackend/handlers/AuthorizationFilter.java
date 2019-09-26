@@ -31,9 +31,11 @@ public class AuthorizationFilter implements Filter {
         String redirectUri = req.getContextPath() + "/external/login.html";
         if (req.getRequestURI().matches("/external/.+")
                 || req.getRequestURI().equals("/api/auth")
+                || req.getRequestURI().matches("/api/oauth.*")
                 || req.getRequestURI().equals("/api/register")
                 || req.getRequestURI().equals("/error")
                 || req.getRequestURI().equals("/")
+                || req.getRequestURI().equals("/robots.txt")
                 || req.getRequestURI().equals("")
                 || req.getRequestURI().matches("/meta/.*")
                 || req.getRequestURI().equals("/index.html")
@@ -47,10 +49,9 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
 
         if (session == null) {
-            System.out.println("REDIRECT WITH NULL SESSION");
             res.sendRedirect(redirectUri);
             return;
         } else {
@@ -60,7 +61,6 @@ public class AuthorizationFilter implements Filter {
                         break;
                     }
                     else {
-                        System.out.println("REDIRECT WITH INVALID COOKIE");
                         res.sendRedirect(redirectUri);
                         return;
                     }
