@@ -35,6 +35,9 @@ src/main/resources/hibernate.cfg.xml
 hibernate.cfg.xml
 local_configs.properties
 
+### node_modules ###
+node_modules/**
+
 ### JavaScript Bundles                              ###
 ### You can found sources on Frontend repository:   ###
 ### https://github.com/AppLoidx/helios-front-end    ###
@@ -46,5 +49,4 @@ static/js/bundle.js.map
 
 ### Static resources (see front-end repository)###
 
-
-static/**
+src/main/resources/static/**
