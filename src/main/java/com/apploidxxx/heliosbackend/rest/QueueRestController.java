@@ -1,11 +1,11 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.config.ExternalSourcesConfig;
+import com.apploidxxx.heliosbackend.config.SourcesConfig;
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
-import com.apploidxxx.heliosbackend.rest.util.Request;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
+import com.apploidxxx.heliosbackend.rest.util.request.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -102,7 +102,7 @@ public class QueueRestController {
             @RequestParam(value = "username", defaultValue = "") String username){
         try {
 
-            new RestTemplate().delete(ExternalSourcesConfig.heliosApiUri
+            new RestTemplate().delete(SourcesConfig.heliosApiUri
             + "queue?" + String.format("access_token=%s&queue_name=%s&target=%s&username=%s",
                     new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
                     queueName, target, username));

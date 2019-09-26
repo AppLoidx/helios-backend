@@ -4,8 +4,8 @@ import com.apploidxxx.heliosbackend.data.entity.User;
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
-import com.apploidxxx.heliosbackend.rest.util.Request;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
+import com.apploidxxx.heliosbackend.rest.util.request.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,6 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.rest.util.Request;
+import com.apploidxxx.heliosbackend.rest.util.request.Request;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
