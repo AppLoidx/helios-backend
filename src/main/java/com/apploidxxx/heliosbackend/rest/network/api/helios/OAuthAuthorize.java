@@ -1,6 +1,6 @@
 package com.apploidxxx.heliosbackend.rest.network.api.helios;
 
-import com.apploidxxx.heliosbackend.config.ExternalSourcesConfig;
+import com.apploidxxx.heliosbackend.config.SourcesConfig;
 import com.apploidxxx.heliosbackend.data.entity.Token;
 import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
 import com.apploidxxx.heliosbackend.rest.network.api.helios.exception.UnauthorizedException;
@@ -25,7 +25,7 @@ public class OAuthAuthorize {
 
         try {
             return restTemplate
-                    .getForObject(ExternalSourcesConfig.heliosApiUri + "auth?login={login}&password={password}",
+                    .getForObject(SourcesConfig.heliosApiUri + "auth?login={login}&password={password}",
                             Token.class, vars);
 
         } catch (HttpClientErrorException e) {
