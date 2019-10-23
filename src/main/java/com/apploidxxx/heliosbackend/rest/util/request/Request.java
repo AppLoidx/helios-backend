@@ -1,10 +1,17 @@
 package com.apploidxxx.heliosbackend.rest.util.request;
 
 import com.apploidxxx.heliosbackend.config.SourcesConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.apploidxxx.heliosbackend.rest.util.request.RequestUtil.getMap;
@@ -17,7 +24,19 @@ import static com.apploidxxx.heliosbackend.rest.util.request.RequestUtil.getMap;
  * @author Arthur Kupriyanov
  */
 @NoArgsConstructor
+@Component
 public class Request {
+
+    private static RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+        MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+        jsonMessageConverter.setObjectMapper(new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE));
+        messageConverters.add(jsonMessageConverter);
+        restTemplate.setMessageConverters(messageConverters);
+
+        return restTemplate;
+    }
 
     /**
      *
@@ -31,7 +50,7 @@ public class Request {
      */
     public <T> ResponseEntity<T> get(String path, Class<T> model, Map<String, String> vars) {
 
-        return new RestTemplate().getForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), model, vars);
+        return restTemplate().getForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), model, vars);
     }
 
     public <T> ResponseEntity<T> get(String path, Class<T> model, String... vars) {
@@ -51,7 +70,7 @@ public class Request {
      * @see #post(String, Class, String...)
      */
     public <T> ResponseEntity<T> post(String path, Object object, Class<T> model, Map<String, String> vars) {
-        return new RestTemplate().postForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), object, model, vars);
+        return restTemplate().postForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), object, model, vars);
     }
 
     public <T> ResponseEntity<T> post(String path, Object object, Class<T> model, String... vars) {
@@ -59,7 +78,7 @@ public class Request {
     }
 
     public <T> ResponseEntity<T> post(String path, Class<T> model, Map<String, String> vars) {
-        return new RestTemplate().postForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), null, model, vars);
+        return restTemplate().postForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), null, model, vars);
     }
 
     public <T> ResponseEntity<T> post(String path, Class<T> model, String... vars) {
@@ -69,16 +88,14 @@ public class Request {
     /**
      *
      * @param path path относительный путь к API
-     * @param model POJO class
      * @param vars params
-     * @param <T> model's class
      */
-    public static <T> void delete(String path, Class<T> model, Map<String, String> vars) {
-        new RestTemplate().delete(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), model, vars);
+    public static void delete(String path, Map<String, String> vars) {
+        restTemplate().delete(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), vars);
     }
 
-    public static <T> void delete(String path, Class<T> model, String... vars) {
-        delete(path, model, getMap(vars));
+    public static void delete(String path, String... vars) {
+        delete(path, getMap(vars));
     }
 
     /**
@@ -88,7 +105,7 @@ public class Request {
      * @param vars params
      */
     public static void put(String path, Object object, Map<String, String> vars) {
-        new RestTemplate().put(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), object, vars);
+        restTemplate().put(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), object, vars);
     }
 
     public static void put(String path, Object object, String... vars) {
@@ -102,6 +119,7 @@ public class Request {
         StringBuilder sb = new StringBuilder();
 
         for (String k : map.keySet()) {
+            if (k == null) continue;
             sb.append(k).append("={").append(k).append("}&");
         }
         return path + "?" + sb.toString().substring(0, sb.length() - 1);

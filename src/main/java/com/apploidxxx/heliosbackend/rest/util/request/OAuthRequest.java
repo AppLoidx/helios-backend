@@ -33,7 +33,7 @@ public class OAuthRequest {
             });
             case POST: return new RequestModel<>(path, model, object, args).setOperation((p, m, obj, argz) -> new Request().post(p, m, argz));
             case DELETE: return new RequestModel<>(path, model, object, args).setOperation((p, m, obj, argz) -> {
-                Request.delete(p, m, argz);
+                Request.delete(p, argz);
                 return null;
             });
             default:
