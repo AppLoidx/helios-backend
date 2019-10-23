@@ -1,6 +1,6 @@
 package com.apploidxxx.heliosbackend.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,10 +24,10 @@ public class Token implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @JsonAlias("access_token")
+    @JsonProperty("access_token")
     private String accessToken;
 
-    @JsonAlias("refresh_token")
+    @JsonProperty("refresh_token")
     private String refreshToken;
 
     public Token() {
