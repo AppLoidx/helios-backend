@@ -6,10 +6,7 @@ import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.UserModel;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +24,12 @@ public class UserRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Object getUser(@CookieValue("session") String session, HttpServletResponse response) {
+    public Object getUser(
+            HttpServletResponse response,
+            @CookieValue("session") String session,
+            @RequestParam(value = "username", required = false) String username
+    ) {
+
         User user;
         try {
             user = new UserManager(userRepository).getUser(session);
@@ -35,8 +37,18 @@ public class UserRestController {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return e.getErrorMessage();
         }
+
+        // TODO: refactor this thing
+
         try {
-            return new Request().get("user", UserModel.class, "access_token", user.getUserToken().getAccessToken());
+            if (username == null) {
+                return new Request().get("user", UserModel.class,
+                        "access_token", user.getUserToken().getAccessToken()).getBody();
+            }
+            else
+                return new Request().get("user", UserModel.class,
+                        "access_token", user.getUserToken().getAccessToken(),
+                        "username", username).getBody();
         } catch (HttpStatusCodeException e){
             response.setStatus(e.getStatusCode().value());
             return null;
