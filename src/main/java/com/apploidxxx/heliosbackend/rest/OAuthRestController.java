@@ -9,6 +9,7 @@ import com.apploidxxx.heliosbackend.rest.model.UserModel;
 import com.apploidxxx.heliosbackend.rest.util.SessionGenerator;
 import com.apploidxxx.heliosbackend.rest.util.UserRestGetter;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -22,6 +23,7 @@ import java.io.IOException;
 /**
  * @author Arthur Kupriyanov
  */
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/oauth")
 public class OAuthRestController {
@@ -45,8 +47,13 @@ public class OAuthRestController {
         }
 
         if (token == null) return tokenIsInvalidServerError(response);
+        UserModel userModel = null;
+        try {
+            userModel = UserRestGetter.getUser(token);
+        } catch (HttpStatusCodeException e){
+            log.error(e.getResponseBodyAsString(), e);
+        }
 
-        UserModel userModel = UserRestGetter.getUser(token);
         if (userModel == null) return tokenIsInvalidServerError(response);
 
         User user = userRepository.findByUsername(userModel.getUser().getUsername()).orElse(null);
@@ -78,7 +85,7 @@ public class OAuthRestController {
         return new ErrorMessage("invalid_token", "Responded invalid tokens from Helios API");
     }
 
-    private Object setNewUser(HttpServletResponse response, com.apploidxxx.heliosbackend.rest.model.User uninitializedUser, Token token) throws IOException {
+    private Object setNewUser(HttpServletResponse response, com.apploidxxx.heliosbackend.rest.model.user.User uninitializedUser, Token token) throws IOException {
         User user = generateNewUser(token, uninitializedUser);
         userRepository.save(user);
         return saveUserSessionAndRedirectToMainPage(response, user);
@@ -90,7 +97,7 @@ public class OAuthRestController {
         return saveUserSessionAndRedirectToMainPage(response, user);
     }
 
-    private User generateNewUser(Token token, com.apploidxxx.heliosbackend.rest.model.User user) {
+    private User generateNewUser(Token token, com.apploidxxx.heliosbackend.rest.model.user.User user) {
 
         return new User(token, SessionGenerator.generateSession(user.getUsername(), user.getFirstName()), user.getUsername());
 
