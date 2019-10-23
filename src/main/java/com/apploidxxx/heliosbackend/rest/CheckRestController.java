@@ -16,8 +16,10 @@ public class CheckRestController {
                @RequestParam(value = "queue_name", defaultValue = "") String queueName,
                @RequestParam(value = "username", defaultValue = "") String username) {
         try {
-            return new Request().get("check", String.class, "check", check,
-                    "queue_name", queueName, "username", username);
+            return new Request().get("check", Object.class,
+                    "check", check,
+                    "queue_name", queueName,
+                    "username", username).getBody();
         } catch (HttpStatusCodeException e) {
             return e.getResponseBodyAsString();
         }
