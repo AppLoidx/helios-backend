@@ -1,20 +1,17 @@
 package com.apploidxxx.heliosbackend.rest.model.vk;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.apploidxxx.heliosbackend.rest.model.WebModel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
  * @author Arthur Kupriyanov
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class AccessToken {
-    @JsonProperty("access_token")
+public class AccessToken extends WebModel {
     private String accessToken;
-    @JsonProperty("expires_in")
     private String expiresIn;
-    private String error;
-    @JsonProperty("error_description")
-    private String errorDescription;
 }
