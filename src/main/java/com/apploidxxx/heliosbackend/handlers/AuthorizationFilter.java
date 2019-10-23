@@ -55,6 +55,7 @@ public class AuthorizationFilter implements Filter {
             res.sendRedirect(redirectUri);
             return;
         } else {
+            if (req.getCookies() != null)
             for (Cookie c : req.getCookies()) {
                 if (c.getName().equals("session")) {
                     if (c.getValue() != null) {
