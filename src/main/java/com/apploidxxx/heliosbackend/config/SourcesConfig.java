@@ -1,20 +1,40 @@
 package com.apploidxxx.heliosbackend.config;
 
+import com.apploidxxx.heliosbackend.rest.util.PropertyManager;
+
+import java.io.IOException;
+
 /**
  * @author Arthur Kupriyanov
  */
 public class SourcesConfig {
 
+    public static final boolean connectToLocalAPI = false;
+
     // API Side URI's
-    private static final String BASE_URI = "https://helios-service.herokuapp.com";
-//    private static final String BASE_URI = "http://localhost:3000";
+    private static final String SERVICE_URL;
 
-    // Dynamic addresses
-    public static final String heliosApiUri = BASE_URI + "/api/";   // last slash is necessary
-    public static final String oAuthUri = BASE_URI + "/html/external/login.html";
+    public static final String DOMAIN;
 
-    // Local or another domain names
-    public static final String DOMAIN = "https://itmo-helios.herokuapp.com";
-//    public static final String DOMAIN = "http://localhost:8080";
+    static {    // setting up domain to redirect here after OAuth processing
+        String domain = "http://localhost:8080";
+        try {
+            domain = PropertyManager.getProperty("DOMAIN");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DOMAIN = domain;
+    }
 
+    static {    // setting up URL to API
+
+        if (connectToLocalAPI){
+            SERVICE_URL = "http://localhost:3000";
+        } else {
+            SERVICE_URL = "https://helios-service.herokuapp.com";
+        }
+    }
+
+    public static final String heliosApiUri = SERVICE_URL + "/api/";   // last slash is necessary
+    public static final String oAuthUri = SERVICE_URL + "/auth/login.html";
 }
