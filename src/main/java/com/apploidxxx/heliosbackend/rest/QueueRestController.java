@@ -1,22 +1,22 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.config.SourcesConfig;
+
 import com.apploidxxx.heliosbackend.data.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author Arthur Kupriyanov
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/queue")
 public class QueueRestController {
@@ -26,10 +26,12 @@ public class QueueRestController {
         this.userRepository = userRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody
-    Object
-    get(HttpServletResponse response, @CookieValue("session") String session, @RequestParam("queue_name") String queueName) throws IOException {
+    @GetMapping(produces = "application/json")
+    public Object get(
+            HttpServletResponse response,
+            @CookieValue("session") String session,
+            @RequestParam("queue_name") String queueName
+    ) {
         try {
             new UserManager(userRepository).getUser(session);
         } catch (UserNotFoundException e) {
@@ -47,12 +49,13 @@ public class QueueRestController {
         return queueResponseEntity.getBody();
     }
 
-    @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
-    public @ResponseBody
-    Object
-    put(HttpServletResponse response, @CookieValue("session") String session,
-        @RequestParam(value = "queue_name") String queueName,
-        @RequestParam(value = "password", defaultValue = "") String password) {
+    @PutMapping( produces = "application/json")
+    public Object put(
+            HttpServletResponse response,
+            @CookieValue("session") String session,
+            @RequestParam(value = "queue_name") String queueName,
+            @RequestParam(value = "password", defaultValue = "") String password
+    ) {
 
         try {
             Request.put("queue", null,
@@ -68,14 +71,16 @@ public class QueueRestController {
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody
-    Object
-    post(HttpServletResponse response, @CookieValue("session") String session,
-         @RequestParam("queue_name") String queueName,
-         @RequestParam("fullname") String fullname,
-         @RequestParam(value = "generation", defaultValue = "") String genaration,
-         @RequestParam(value = "password", defaultValue = "") String password) {
+    @PostMapping(produces = "application/json")
+    public Object post(
+            HttpServletResponse response,
+            @CookieValue("session") String session,
+
+            @RequestParam("queue_name") String queueName,
+            @RequestParam("fullname") String fullname,
+            @RequestParam(value = "generation", defaultValue = "") String generation,
+            @RequestParam(value = "password", defaultValue = "") String password
+    ) {
 
         try {
             new Request().post("queue", null,
@@ -83,29 +88,39 @@ public class QueueRestController {
                     "queue_name", queueName,
                     "password", password,
                     "fullname", fullname,
-                    "generation", genaration);
+                    "generation", generation);
         } catch (UserNotFoundException e) {
             return e.wrapResponse(response);
         } catch (HttpStatusCodeException e) {
+            log.error(e.getResponseBodyAsString());
+            log.error("Error during post queue api ", e);
             response.setStatus(e.getStatusCode().value());
             return e.getResponseBodyAsString();
         }
         return null;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, produces = "application/json")
-    public @ResponseBody
-    Object
-    delete (HttpServletResponse response, @CookieValue("session") String session,
+    @DeleteMapping( produces = "application/json")
+    public Object delete (
+            HttpServletResponse response,
+            @CookieValue("session") String session,
             @RequestParam("queue_name") String queueName,
             @RequestParam("target") String target,
-            @RequestParam(value = "username", defaultValue = "") String username){
+            @RequestParam(value = "username", required = false) String username
+    ){
         try {
 
-            new RestTemplate().delete(SourcesConfig.heliosApiUri
-            + "queue?" + String.format("access_token=%s&queue_name=%s&target=%s&username=%s",
-                    new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
-                    queueName, target, username));
+            if (username == null) Request.delete("queue",
+                    "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+                    "queue_name", queueName,
+                    "target", target);
+
+            else Request.delete("queue",
+                    "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+                    "queue_name", queueName,
+                    "target", target,
+                    "username", username);
+
         } catch (UserNotFoundException e) {
             return e.wrapResponse(response);
         } catch (HttpStatusCodeException e) {
