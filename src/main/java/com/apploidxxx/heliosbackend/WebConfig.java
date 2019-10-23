@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
@@ -16,7 +15,6 @@ import java.util.Properties;
  * @author Arthur Kupriyanov
  */
 @Configuration
-@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
     private final Logger logger = LoggerFactory.getLogger(WebConfig.class);
     //
