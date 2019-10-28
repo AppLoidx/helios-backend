@@ -1,6 +1,7 @@
 package com.apploidxxx.heliosbackend.rest.exceptions;
 
 import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
+import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +17,11 @@ public class UserNotFoundException extends WebException {
     @Override
     public String getErrorDescription() {
         return "User not found with this session";
+    }
+
+    @Override
+    public HttpStatus getStatusCode() {
+        return HttpStatus.UNAUTHORIZED;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class UserSocialData implements Serializable {
     public UserSocialData() {
     }
 
-    public UserSocialData(User user){
+    public UserSocialData(User user) {
         this.user = user;
     }
 
@@ -37,7 +37,7 @@ public class UserSocialData implements Serializable {
     @Column
     private String email;
 
-    public UserSocialData addEmail(String email){
+    public UserSocialData addEmail(String email) {
         this.email = email;
         return this;
     }

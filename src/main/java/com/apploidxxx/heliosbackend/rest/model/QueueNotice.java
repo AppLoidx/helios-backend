@@ -10,7 +10,7 @@ import java.util.Date;
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class QueueNotice implements Comparable<QueueNotice>{
+public class QueueNotice implements Comparable<QueueNotice> {
     private String user;
     private String message;
     private Long id;

@@ -14,7 +14,7 @@ public class UserRestGetter {
 
     /**
      * Получить информацию о пользователе через внешний API Helios, сделав запрос
-     *
+     * <p>
      * Запрос делается с помощью {@link Request} методом {@link Request#get(String, Class, String...)}
      *
      * @param token для получения токена доступа
@@ -22,6 +22,6 @@ public class UserRestGetter {
      * @throws HttpStatusCodeException если произошла ошибка при запросе
      */
     public static UserModel getUser(Token token) throws HttpStatusCodeException {
-         return new Request().get("user", UserModel.class, "access_token", token.getAccessToken()).getBody();
+        return new Request().get("user", UserModel.class, "access_token", token.getAccessToken()).getBody();
     }
 }

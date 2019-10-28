@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.GenerationType;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,13 +17,13 @@ import java.util.TreeSet;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Queue extends WebModel{
-    private String creationDate;
+public class Queue extends WebModel {
+    private Date creationDate;
     private GenerationType generationType;
     private String password;
     private String name;
     private String fullname;
-    private Set<User> members;
+    private List<User> members;
     private Set<User> superUsers;
     private List<Long> queueSequence;
     private String description;

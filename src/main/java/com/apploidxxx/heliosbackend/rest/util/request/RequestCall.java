@@ -8,6 +8,6 @@ import java.util.Map;
  * @author Arthur Kupriyanov
  */
 @FunctionalInterface
-interface RequestCall<T>{
+interface RequestCall<T> {
     ResponseEntity<T> doRequest(String path, Class<T> model, Object object, Map<String, String> args);
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserModel {
-    private List<Map<String , String>> queues;
+    private List<Map<String, String>> queues;
     private List<Map<String, String>> queuesMember;
     private User user;
 

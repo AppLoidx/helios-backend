@@ -11,8 +11,9 @@ public class PropertyManager {
 
     /**
      * Getting property from System env
-     *
+     * <p>
      * If property doesn't exist - gets property from local properties file  : "local_env.properties"
+     *
      * @param property key of property
      * @return property value or null if property doesn't exist both of system env and local properties
      * @throws IOException exception while trying read local properties file

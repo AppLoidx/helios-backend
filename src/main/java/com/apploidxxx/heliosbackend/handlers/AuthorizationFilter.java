@@ -56,17 +56,16 @@ public class AuthorizationFilter implements Filter {
             return;
         } else {
             if (req.getCookies() != null)
-            for (Cookie c : req.getCookies()) {
-                if (c.getName().equals("session")) {
-                    if (c.getValue() != null) {
-                        break;
-                    }
-                    else {
-                        res.sendRedirect(redirectUri);
-                        return;
+                for (Cookie c : req.getCookies()) {
+                    if (c.getName().equals("session")) {
+                        if (c.getValue() != null) {
+                            break;
+                        } else {
+                            res.sendRedirect(redirectUri);
+                            return;
+                        }
                     }
                 }
-            }
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

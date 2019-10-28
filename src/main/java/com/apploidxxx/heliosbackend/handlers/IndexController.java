@@ -9,21 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
     @RequestMapping("/")
-    public String mainPage(){
+    public String mainPage() {
         return "index.html";
     }
+
     @RequestMapping("")
-    public String main(){
+    public String main() {
         return "/index.html";
     }
 
     @RequestMapping("/policy")
-    public String policyPage(){
+    public String policyPage() {
         return "policy/index.html";
     }
 
     @RequestMapping("/policy/")
-    public String policy(){
+    public String policy() {
         return "index.html";
     }
 }

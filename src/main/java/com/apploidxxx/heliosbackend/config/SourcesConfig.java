@@ -28,7 +28,7 @@ public class SourcesConfig {
 
     static {    // setting up URL to API
 
-        if (connectToLocalAPI){
+        if (connectToLocalAPI) {
             SERVICE_URL = "http://localhost:3000";
         } else {
             SERVICE_URL = "https://helios-service.herokuapp.com";

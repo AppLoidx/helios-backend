@@ -17,6 +17,7 @@ import java.util.Properties;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     private final Logger logger = LoggerFactory.getLogger(WebConfig.class);
+
     //
     @Bean
     public DataSource dataSource() {

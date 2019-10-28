@@ -1,14 +1,12 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.repository.UserRepository;
-import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
+import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
+import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 /**
  * @author Arthur Kupriyanov
@@ -28,70 +26,40 @@ public class BadgesRestController {
             HttpServletResponse response,
             @CookieValue("session") String session,
             @RequestParam(value = "username", required = false) String username
-    ){
-        Optional<User> user = userRepository.findBySession(session);
-        if (!user.isPresent()) return new ErrorMessage("invalid_token", "your session expired");
-        try {
-            if (username == null) {
-                return new Request().get("badges", String.class,
-                        "access_token", user.get().getUserToken().getAccessToken()).getBody();
-            } else {
-                return new Request().get("badges", String.class,
-                        "access_token", user.get().getUserToken().getAccessToken(),
-                        "username", username);
-            }
-        } catch (HttpClientErrorException e){
-            response.setStatus(e.getStatusCode().value());
-            return e.getResponseBodyAsString();
-        }
+    ) {
+        User user = new UserManager(userRepository).getUser(session);
+
+        return new Request().get("badges", String.class,
+                "access_token", user.getUserToken().getAccessToken(),
+                "username", username);
+
     }
 
     @PutMapping
     public Object putBadge(
-            HttpServletResponse response,
             @CookieValue("session") String session,
             @RequestParam(value = "username", required = false) String username
-    ){
-        Optional<User> user = userRepository.findBySession(session);
-        if (!user.isPresent()) return new ErrorMessage("invalid_token", "your session expired");
-        try {
-            if (username == null) {
-                Request.put("badges", null,
-                        "access_token", user.get().getUserToken().getAccessToken());
-            } else {
-                Request.put("badges", null,
-                        "access_token", user.get().getUserToken().getAccessToken(),
-                        "username", username);
-            }
-        } catch (HttpClientErrorException e){
-            response.setStatus(e.getStatusCode().value());
-            return e.getResponseBodyAsString();
-        }
+    ) {
+        User user = new UserManager(userRepository).getUser(session);
+
+        Request.put("badges", null,
+                "access_token", user.getUserToken().getAccessToken(),
+                "username", username);
 
         return null;
     }
 
     @DeleteMapping
     public Object removeBadge(
-            HttpServletResponse response,
             @CookieValue("session") String session,
             @RequestParam(value = "username", required = false) String username
-    ){
-        Optional<User> user = userRepository.findBySession(session);
-        if (!user.isPresent()) return new ErrorMessage("invalid_token", "your session expired");
-        try {
-            if (username == null) {
-                Request.delete("badges", null,
-                        "access_token", user.get().getUserToken().getAccessToken());
-            } else {
-                Request.delete("badges", null,
-                        "access_token", user.get().getUserToken().getAccessToken(),
-                        "username", username);
-            }
-        } catch (HttpClientErrorException e){
-            response.setStatus(e.getStatusCode().value());
-            return e.getResponseBodyAsString();
-        }
+    ) {
+        User user = new UserManager(userRepository).getUser(session);
+
+        Request.delete("badges", null,
+                "access_token", user.getUserToken().getAccessToken(),
+                "username", username);
+
 
         return null;
     }

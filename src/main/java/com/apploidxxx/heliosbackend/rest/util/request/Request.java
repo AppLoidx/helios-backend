@@ -19,9 +19,8 @@ import static com.apploidxxx.heliosbackend.rest.util.request.RequestUtil.getMap;
 /**
  * Обертка над {@link RestTemplate} для запросов к Helios API
  *
- * @see SourcesConfig#heliosApiUri
- *
  * @author Arthur Kupriyanov
+ * @see SourcesConfig#heliosApiUri
  */
 @NoArgsConstructor
 @Component
@@ -39,11 +38,10 @@ public class Request {
     }
 
     /**
-     *
-     * @param path относительный путь к API
+     * @param path  относительный путь к API
      * @param model POJO class
-     * @param vars params
-     * @param <T> model's class
+     * @param vars  params
+     * @param <T>   model's class
      * @return ResponseEntity wrapped by model
      * @see SourcesConfig
      * @see #get(String, Class, String...)
@@ -59,12 +57,11 @@ public class Request {
 
 
     /**
-     *
-     * @param path path относительный путь к API
+     * @param path   path относительный путь к API
      * @param object посылаемый объект
-     * @param model POJO class
-     * @param vars params
-     * @param <T> model's class
+     * @param model  POJO class
+     * @param vars   params
+     * @param <T>    model's class
      * @return ResponseEntity wrapped by model
      * @see SourcesConfig
      * @see #post(String, Class, String...)
@@ -86,7 +83,6 @@ public class Request {
     }
 
     /**
-     *
      * @param path path относительный путь к API
      * @param vars params
      */
@@ -99,10 +95,9 @@ public class Request {
     }
 
     /**
-     *
-     * @param path path относительный путь к API
+     * @param path   path относительный путь к API
      * @param object посылаемый объект
-     * @param vars params
+     * @param vars   params
      */
     public static void put(String path, Object object, Map<String, String> vars) {
         restTemplate().put(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), object, vars);
@@ -111,7 +106,6 @@ public class Request {
     public static void put(String path, Object object, String... vars) {
         put(path, object, getMap(vars));
     }
-
 
 
     private static String generatePathWithParams(String path, Map<String, String> map) {

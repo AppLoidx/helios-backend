@@ -1,9 +1,11 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.data.repository.UserRepository;
-import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
+import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -22,21 +24,25 @@ public class LogoutRestController {
     }
 
     @GetMapping
-    public @ResponseBody
-    Object logout(@CookieValue(value = "session", defaultValue = "") String session,
-                  HttpServletResponse response) throws IOException {
-        if (session.equals("")) response.sendRedirect("/api/auth");
-        try {
-            new UserManager(userRepository).getUser(session);
-        } catch (UserNotFoundException e) {
-            return e.wrapResponse(response);
-        }
-        response.setStatus(200);
-        Cookie c = new Cookie("session", null);
-        c.setMaxAge(0);
-        response.addCookie(c);
+    public Object logout(
+            @CookieValue(value = "session", required = false) String session,
+            HttpServletResponse response
+    ) throws IOException {
+
+        if (session == null) response.sendRedirect("/api/auth");
+
+        new UserManager(userRepository).getUser(session);
+
+        response.setStatus(308);
+        invalidateSessionCookie(response);
 
         response.sendRedirect("/api/auth");
         return null;
+    }
+
+    private void invalidateSessionCookie(HttpServletResponse response) {
+        Cookie c = new Cookie("session", null);
+        c.setMaxAge(0);
+        response.addCookie(c);
     }
 }

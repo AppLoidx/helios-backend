@@ -22,15 +22,15 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
 
-            if(statusCode == HttpStatus.NOT_FOUND.value()) {
+            if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error-404.html";
-            }
-            else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
+            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 return "error-500.html";
             }
         }
         return "error";
     }
+
     @Override
     public String getErrorPath() {
         return "/error";

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserSettings extends WebModel{
+public class UserSettings extends WebModel {
 
     private ContactDetails contactDetails;
 

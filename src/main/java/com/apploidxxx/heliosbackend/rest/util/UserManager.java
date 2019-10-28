@@ -1,7 +1,7 @@
 package com.apploidxxx.heliosbackend.rest.util;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.repository.UserRepository;
+import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Component;
 

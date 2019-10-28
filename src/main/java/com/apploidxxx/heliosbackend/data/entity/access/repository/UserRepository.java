@@ -1,4 +1,4 @@
-package com.apploidxxx.heliosbackend.data.repository;
+package com.apploidxxx.heliosbackend.data.entity.access.repository;
 
 import com.apploidxxx.heliosbackend.data.entity.Token;
 import com.apploidxxx.heliosbackend.data.entity.User;

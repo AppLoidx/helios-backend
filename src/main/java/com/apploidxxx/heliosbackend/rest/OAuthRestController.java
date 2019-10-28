@@ -3,7 +3,7 @@ package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.Token;
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.repository.UserRepository;
+import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
 import com.apploidxxx.heliosbackend.rest.model.UserModel;
 import com.apploidxxx.heliosbackend.rest.util.SessionGenerator;
@@ -38,31 +38,15 @@ public class OAuthRestController {
     Object getToken(HttpServletResponse response, HttpServletRequest request,
                     @RequestParam(value = "authorization_code", defaultValue = "") String authorizationCode) {
 
-        Token token;
-        try {
-            token = getToken(authorizationCode);
-        } catch (HttpStatusCodeException e) {
-            response.setStatus(e.getStatusCode().value());
-            return e.getResponseBodyAsString();
-        }
-
+        Token token = getToken(authorizationCode);
         if (token == null) return tokenIsInvalidServerError(response);
-        UserModel userModel = null;
-        try {
-            userModel = UserRestGetter.getUser(token);
-        } catch (HttpStatusCodeException e){
-            log.error(e.getResponseBodyAsString(), e);
-        }
 
+        UserModel userModel = UserRestGetter.getUser(token);
         if (userModel == null) return tokenIsInvalidServerError(response);
 
         User user = userRepository.findByUsername(userModel.getUser().getUsername()).orElse(null);
 
-        HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
-            oldSession.invalidate();
-        }
-        request.getSession(true);
+        setNewSession(request);
 
         try {
             if (user == null) return setNewUser(response, userModel.getUser(), token);
@@ -72,8 +56,14 @@ public class OAuthRestController {
             response.setStatus(500);
             return new ErrorMessage("internal_server_error", "Error occurred when trying redirect: " + e.getMessage());
         }
+    }
 
-
+    private void setNewSession(HttpServletRequest request) {
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+        request.getSession(true);
     }
 
     private Token getToken(String code) throws HttpStatusCodeException {

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@EnableJpaRepositories("com.apploidxxx.heliosbackend.data.repository")
+@EnableJpaRepositories("com.apploidxxx.heliosbackend.data.entity.access.repository")
 public class HeliosBackendApplication {
 
     public static void main(String[] args) {
