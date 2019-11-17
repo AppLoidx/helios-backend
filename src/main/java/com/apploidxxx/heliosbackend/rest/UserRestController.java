@@ -27,15 +27,9 @@ public class UserRestController {
 
         User user = userManager.getUser(session);
 
-        // todo: refactor this fcking shit
-
-        if (username == null) {
-            return new Request().get("user", UserModel.class,
-                    "access_token", user.getUserToken().getAccessToken()).getBody();
-        } else
-            return new Request().get("user", UserModel.class,
-                    "access_token", user.getUserToken().getAccessToken(),
-                    "username", username).getBody();
+        return new Request().get("user", UserModel.class,
+                "access_token", user.getUserToken().getAccessToken(),
+                "username", username).getBody();
 
     }
 }
