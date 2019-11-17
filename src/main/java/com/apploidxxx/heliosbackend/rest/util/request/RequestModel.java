@@ -21,12 +21,6 @@ class RequestModel<T> {
         this.args = RequestUtil.getMap(args);
     }
 
-    RequestModel(String path, Class<T> model, Object object, Map<String, String> args) {
-        this.path = path;
-        this.model = model;
-        this.object = object;
-        this.args = args;
-    }
 
     private RequestFailHandler<T> failCallback;
     private RequestCall<T> request;
