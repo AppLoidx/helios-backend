@@ -1,7 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/swap")
 public class SwapRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public SwapRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SwapRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @PostMapping(produces = "application/json")
@@ -31,7 +30,7 @@ public class SwapRestController {
             @RequestParam("queue_name") String queueName
     ) {
 
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
 
         ResponseEntity<ErrorMessage> resEnt;
         resEnt = new Request().post("swap", ErrorMessage.class,

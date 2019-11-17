@@ -1,7 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.model.UserSettings;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/settings/{username}")
 public class SettingsRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public SettingsRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SettingsRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @GetMapping(produces = "application/json")
@@ -28,7 +27,7 @@ public class SettingsRestController {
             @CookieValue("session") String session,
             HttpServletResponse response) {
 
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
         ResponseEntity<UserSettings> responseEntity = new Request().get("settings/" + username, UserSettings.class,
                 "access_token", user.getUserToken().getAccessToken());
 
@@ -45,7 +44,7 @@ public class SettingsRestController {
                       @RequestParam("value") String value
     ) {
 
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
 
         Request.put("settings/" + username, UserSettings.class,
                 "access_token", user.getUserToken().getAccessToken(),

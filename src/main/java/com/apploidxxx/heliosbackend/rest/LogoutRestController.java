@@ -1,6 +1,5 @@
 package com.apploidxxx.heliosbackend.rest;
 
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +16,10 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api/logout")
 public class LogoutRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public LogoutRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public LogoutRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @GetMapping
@@ -31,7 +30,7 @@ public class LogoutRestController {
 
         if (session == null) response.sendRedirect("/api/auth");
 
-        new UserManager(userRepository).getUser(session);
+        userManager.getUser(session);
 
         response.setStatus(308);
         invalidateSessionCookie(response);

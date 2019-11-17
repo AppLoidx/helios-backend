@@ -1,7 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
@@ -13,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/queue/{id}")
 public class QueueControlRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public QueueControlRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public QueueControlRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @GetMapping(produces = "application/json")
@@ -26,7 +25,7 @@ public class QueueControlRestController {
 
             @RequestParam(value = "username", required = false) String username
     ) {
-        User user = new UserManager(userRepository).getUser(session);
+        User user =userManager.getUser(session);
         return sendNextUserAndGetNewFormattedQueueRequest(queueName, user, username);
     }
 
@@ -46,7 +45,7 @@ public class QueueControlRestController {
             @RequestParam(value = "type", defaultValue = "") String type,
             @RequestParam(value = "admin", defaultValue = "") String admin
     ) {
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
         sendNewQueueSettingRequest(queueName, actionType, type, admin, user);
 
         return null;

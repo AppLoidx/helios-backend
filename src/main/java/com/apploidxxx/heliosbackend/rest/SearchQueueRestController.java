@@ -1,7 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +16,10 @@ import java.util.List;
 @RequestMapping("/api/search/queue")
 public class SearchQueueRestController {
 
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public SearchQueueRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SearchQueueRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @GetMapping
@@ -30,7 +29,7 @@ public class SearchQueueRestController {
 
             @RequestParam("queue_name") String queueName
     ) {
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
         ResponseEntity<List> responseEntity =
                 new Request().get("search/queue", List.class,
                         "access_token", user.getUserToken().getAccessToken(),

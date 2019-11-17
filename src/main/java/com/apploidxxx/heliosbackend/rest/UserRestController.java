@@ -1,7 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.exceptions.UserNotFoundException;
 import com.apploidxxx.heliosbackend.rest.model.UserModel;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 public class UserRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public UserRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -26,7 +25,7 @@ public class UserRestController {
             @RequestParam(value = "username", required = false) String username
     ) throws UserNotFoundException {
 
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
 
         // todo: refactor this fcking shit
 

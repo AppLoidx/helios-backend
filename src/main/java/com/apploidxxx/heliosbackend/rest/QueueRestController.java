@@ -2,7 +2,6 @@ package com.apploidxxx.heliosbackend.rest;
 
 
 import com.apploidxxx.heliosbackend.data.entity.User;
-import com.apploidxxx.heliosbackend.data.entity.access.repository.UserRepository;
 import com.apploidxxx.heliosbackend.rest.model.Queue;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import com.apploidxxx.heliosbackend.rest.util.request.Request;
@@ -19,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/queue")
 public class QueueRestController {
-    private final UserRepository userRepository;
+    private final UserManager userManager;
 
-    public QueueRestController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public QueueRestController(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @GetMapping(produces = "application/json")
@@ -31,7 +30,7 @@ public class QueueRestController {
             @CookieValue("session") String session,
             @RequestParam("queue_name") String queueName
     ) {
-        new UserManager(userRepository).getUser(session);
+        userManager.getUser(session);
 
         ResponseEntity<Queue> queueResponseEntity;
         queueResponseEntity = new Request().get("queue", Queue.class,
@@ -49,7 +48,7 @@ public class QueueRestController {
     ) {
 
         Request.put("queue", null,
-                "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+                "access_token", userManager.getUser(session).getUserToken().getAccessToken(),
                 "queue_name", queueName,
                 "password", password);
 
@@ -66,7 +65,7 @@ public class QueueRestController {
             @RequestParam(value = "password", defaultValue = "") String password
     ) {
         new Request().post("queue", null,
-                "access_token", new UserManager(userRepository).getUser(session).getUserToken().getAccessToken(),
+                "access_token", userManager.getUser(session).getUserToken().getAccessToken(),
                 "queue_name", queueName,
                 "password", password,
                 "fullname", fullname,
@@ -83,7 +82,7 @@ public class QueueRestController {
             @RequestParam("target") String target,
             @RequestParam(value = "username", required = false) String username
     ) {
-        User user = new UserManager(userRepository).getUser(session);
+        User user = userManager.getUser(session);
         sendDeleteRequest(user, queueName, target, username);
         return null;
     }
