@@ -6,6 +6,11 @@ import org.springframework.http.HttpStatus;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ *
+ * All child of WebException will be caught by
+ * {@link com.apploidxxx.heliosbackend.handlers.exception.ExceptionHandler}
+ * when they are caused in runtime
+ *
  * @author Arthur Kupriyanov
  */
 public abstract class WebException extends RuntimeException {
