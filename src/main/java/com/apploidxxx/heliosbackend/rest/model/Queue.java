@@ -28,4 +28,5 @@ public class Queue extends WebModel {
     private List<Long> queueSequence;
     private String description;
     private TreeSet<QueueNotice> notifications;
+//    private Map<User, CursoredUsersWrapper> cursoredUsers;
 }

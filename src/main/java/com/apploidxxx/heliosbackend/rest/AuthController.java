@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -32,7 +30,7 @@ public class AuthController {
 
     @GetMapping
     public Object getToken(
-            HttpServletRequest request, HttpServletResponse response,
+            HttpServletResponse response,
             @CookieValue(value = "session", required = false) String session
     ) throws IOException {
 
@@ -40,7 +38,6 @@ public class AuthController {
 
         if (sessionIsValid(session)) {
             redirectUri = getRedirectUriToMain();
-            invalidateSession(request);
         } else redirectUri = getRedirectUriToAuth();
 
         response.sendRedirect(redirectUri);
@@ -70,11 +67,4 @@ public class AuthController {
         return SourcesConfig.oAuthUri + "?redirect_uri=" + SourcesConfig.DOMAIN + "/api/oauth";
     }
 
-    private void invalidateSession(HttpServletRequest request) {
-        HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
-            oldSession.invalidate();
-        }
-        request.getSession(true);
-    }
 }
