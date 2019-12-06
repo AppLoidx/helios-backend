@@ -15,6 +15,8 @@ import java.util.Map;
 public class UserModel {
     private List<Map<String, String>> queues;
     private List<Map<String, String>> queuesMember;
+    private List<Map<String, String>> groupsMember;
+
     private User user;
 
     private List<Map<String, String>> swapRequestsIn;
