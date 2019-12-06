@@ -42,6 +42,15 @@ public class LogoutRestController {
     private void invalidateSessionCookie(HttpServletResponse response) {
         Cookie c = new Cookie("session", null);
         c.setMaxAge(0);
+        c.setPath("/");
+        response.addCookie(c);
+
+
+        // delete old cookie with invalid path : /api
+
+        Cookie cookieWithApiPath = new Cookie("session", null);
+        c.setMaxAge(0);
+        cookieWithApiPath.setPath("/api");
         response.addCookie(c);
     }
 }
