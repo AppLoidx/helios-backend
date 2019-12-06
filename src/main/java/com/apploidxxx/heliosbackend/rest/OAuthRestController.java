@@ -101,6 +101,7 @@ public class OAuthRestController {
 
     private void setSessionCookie(HttpServletResponse response, User user) {
         Cookie c = new Cookie("session", user.getSession());
+        c.setPath("/api");
         response.addCookie(c);
     }
 
