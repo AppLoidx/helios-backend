@@ -1,5 +1,6 @@
 package com.apploidxxx.heliosbackend.rest;
 
+import com.apploidxxx.heliosbackend.data.entity.User;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * @author Arthur Kupriyanov
@@ -25,32 +28,32 @@ public class LogoutRestController {
     @GetMapping
     public Object logout(
             @CookieValue(value = "session", required = false) String session,
-            HttpServletResponse response
+            HttpServletResponse response, HttpServletRequest request
     ) throws IOException {
 
         if (session == null) response.sendRedirect("/api/auth");
 
-        userManager.getUser(session);
+        User user = userManager.getUser(session);
+        user.setSession(null);
+        userManager.saveUser(user);
 
         response.setStatus(308);
-        invalidateSessionCookie(response);
+        invalidateSessionCookie(request, response);
 
         response.sendRedirect("/api/auth");
         return null;
     }
 
-    private void invalidateSessionCookie(HttpServletResponse response) {
-        Cookie c = new Cookie("session", null);
-        c.setMaxAge(0);
-        c.setPath("/");
-        response.addCookie(c);
+    private void invalidateSessionCookie(HttpServletRequest request, HttpServletResponse response) {
 
 
-        // delete old cookie with invalid path : /api
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Arrays.asList(cookies).forEach(c -> {
+                        c.setMaxAge(0);
+                        response.addCookie(c);
+                    });
+        }
 
-        Cookie cookieWithApiPath = new Cookie("session", null);
-        c.setMaxAge(0);
-        cookieWithApiPath.setPath("/api");
-        response.addCookie(c);
     }
 }
