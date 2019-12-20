@@ -100,6 +100,22 @@ public class OAuthRestController {
     }
 
     private void setSessionCookie(HttpServletResponse response, User user) {
+
+        if ("".equals(user.getSession()) || user.getSession() == null) {
+            user.setSession(SessionGenerator.generateSession(user.getUsername(), user.getUsername()));
+            this.userRepository.save(user);
+        }
+
+        Cookie c1 = new Cookie("session", null);
+        c1.setPath("/");
+        c1.setMaxAge(0);
+        response.addCookie(c1);
+
+        Cookie c2 = new Cookie("session", null);
+        c2.setPath("/api/");
+        c2.setMaxAge(0);
+        response.addCookie(c2);
+
         Cookie c = new Cookie("session", user.getSession());
         c.setPath("/api");
         response.addCookie(c);
