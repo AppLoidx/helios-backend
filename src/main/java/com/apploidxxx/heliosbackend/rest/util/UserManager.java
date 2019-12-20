@@ -37,4 +37,8 @@ public class UserManager {
             throw new UserNotFoundException();
         }
     }
+
+    public void saveUser(User u){
+        this.userRepository.save(u);
+    }
 }
