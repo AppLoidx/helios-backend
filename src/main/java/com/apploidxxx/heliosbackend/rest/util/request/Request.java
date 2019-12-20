@@ -48,7 +48,7 @@ public class Request {
      */
     public <T> ResponseEntity<T> get(String path, Class<T> model, Map<String, String> vars) {
 
-        return restTemplate().getForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), model, vars);
+         return restTemplate().getForEntity(SourcesConfig.heliosApiUri + generatePathWithParams(path, vars), model, vars);
     }
 
     public <T> ResponseEntity<T> get(String path, Class<T> model, String... vars) {
