@@ -1,12 +1,14 @@
 package com.apploidxxx.heliosbackend.rest;
 
 import com.apploidxxx.heliosbackend.data.entity.User;
+import com.apploidxxx.heliosbackend.rest.model.ErrorMessage;
 import com.apploidxxx.heliosbackend.rest.util.UserManager;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.NonUniqueResultException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +34,13 @@ public class LogoutRestController {
     ) throws IOException {
 
         if (session == null) response.sendRedirect("/api/auth");
-
-        User user = userManager.getUser(session);
+        User user;
+        try {
+            user = userManager.getUser(session);
+        } catch (NonUniqueResultException e){
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return new ErrorMessage("not_unique_sessions", "you are already unauthorized");
+        }
         user.setSession(null);
         userManager.saveUser(user);
 
