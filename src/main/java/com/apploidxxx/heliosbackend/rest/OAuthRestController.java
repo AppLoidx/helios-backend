@@ -89,7 +89,7 @@ public class OAuthRestController {
 
     private User generateNewUser(Token token, com.apploidxxx.heliosbackend.rest.model.user.User user) {
 
-        return new User(token, SessionGenerator.generateSession(user.getUsername(), user.getFirstName()), user.getUsername());
+        return new User(token, generateUserTokenSession(user), user.getUsername());
 
     }
 
@@ -102,7 +102,7 @@ public class OAuthRestController {
     private void setSessionCookie(HttpServletResponse response, User user) {
 
         if ("".equals(user.getSession()) || user.getSession() == null) {
-            user.setSession(SessionGenerator.generateSession(user.getUsername(), user.getUsername()));
+            user.setSession(generateUserTokenSession(user));
             this.userRepository.save(user);
         }
 
@@ -124,6 +124,23 @@ public class OAuthRestController {
     private Object redirectToMainPage(HttpServletResponse response) throws IOException {
         response.sendRedirect("/helios.html");
         return null;
+    }
+
+    private String generateUserTokenSession(User user){
+        String session = SessionGenerator.generateSession(user.getUsername(), user.getUsername());
+        if (this.userRepository.findBySession(session).isPresent()){
+            return generateUserTokenSession(user);
+        } else {
+            return session;
+        }
+    }
+    private String generateUserTokenSession(com.apploidxxx.heliosbackend.rest.model.user.User user){
+        String session = SessionGenerator.generateSession(user.getUsername(), user.getUsername());
+        if (this.userRepository.findBySession(session).isPresent()){
+            return generateUserTokenSession(user);
+        } else {
+            return session;
+        }
     }
 
 
